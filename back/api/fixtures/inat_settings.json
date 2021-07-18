@@ -1,0 +1,11 @@
+[
+{
+  "model": "api.inaturalistsettings",
+  "pk": 1,
+  "fields": {
+    "auth_code": "8f80edb0349811ca0a4ff7f0e2e2aa85669118d5df083c7c792fdce1fd9ce538",
+    "token": "6985ab3317f65dcefc7d35ea2879990084995310e8d9cc568c19b0b1a57358c9",
+    "created": true
+  }
+}
+]

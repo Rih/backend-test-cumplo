@@ -1,0 +1,26 @@
+FROM ubuntu:18.04
+MAINTAINER Rodrigo Diaz <rodrigo.ediaz.f@gmail.com>
+RUN apt-get update
+RUN apt-get install -y software-properties-common apt-utils locales locales-all \
+build-essential nginx \
+git \
+nano \
+vim \
+curl
+
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
+RUN apt-get install -y nodejs
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install yarn
+RUN apt-get clean
+
+WORKDIR /front
+
+# Set the locale
+RUN locale-gen es_CL.UTF-8
+ENV LANG es_CL.UTF-8
+ENV LANGUAGE es_CL
+ENV LC_ALL es_CL.UTF-8
+
+CMD /usr/sbin/nginx -g "daemon off;"

@@ -1,0 +1,16 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "username": "root@admin.cl",
+    "first_name": "Root",
+    "last_name": "root",
+    "email": "root@admin.cl",
+    "password": "pbkdf2_sha256$150000$CvQvjWtTLNSk$SDZaAVsiyOZnEqoDvsbmCL5K68I67m7Ml6TY0r/u27Q=",
+    "is_superuser": true,
+    "is_staff": true,
+    "date_joined": "2020-03-17 11:20:53"
+  }
+}
+]

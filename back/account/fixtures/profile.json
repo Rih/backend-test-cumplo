@@ -1,0 +1,11 @@
+[
+{
+  "model": "account.userprofile",
+  "pk": 1,
+  "fields": {
+    "picture": "https://inaturalist-open-data.s3.amazonaws.com/photos/144188184/large.jpeg?1626553916",
+    "user": 1,
+    "created": "2020-03-17 11:20:53"
+  }
+}
+]

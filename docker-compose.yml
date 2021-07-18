@@ -1,0 +1,81 @@
+version: '3'
+services:
+  front:
+    container_name: app_front_inaturalist
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    image: inaturalist_front/ubuntu:v1f
+    networks:
+      - frontend
+    ports:
+      - "8010:86" # public docs
+      - "8008:83" #  proxy -> backend
+      - "8007:82" # extractor
+      - "8006:81" # visualizador/xstock
+    volumes:
+      - ./bin:/usr/local/scripts
+      - ./frontend:/front
+      - ./extractor:/extractor
+      - ./docs:/docs
+      - ./nginx:/nginx
+      - ./static:/static
+    # restart: always
+    depends_on:
+      - web
+    tty: true
+
+  web: # uwsgi
+    container_name: app_web_inaturalist
+    build: 
+      context: .
+      dockerfile: Dockerfile.back
+    image: inaturalist/ubuntu:v1b
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "0.0.0.0:${WEB_HTTPS_PORT}:443"
+      - "0.0.0.0:${WEB_HTTP_DEV_PORT}:8000"
+      - "8009:84" #  proxy -> backend
+      - "8005:8081" # backend = django
+    volumes:
+      - ./backend:/app
+      - ./bin:/usr/local/scripts
+      - ./nginx:/nginx
+      - ./static:/static
+      - ./media:/app_media
+    # restart: always
+    depends_on:
+      - db
+      - redis
+    tty: true
+  db:
+    image: postgres
+    container_name: postgres_inaturalist
+    networks:
+      - backend
+    volumes:
+      #- ./database:/var/lib/postgresql/data
+      - ./bin:/usr/local/scripts
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    # restart: always
+    ports:
+      - "0.0.0.0:${POSTGRES_PORT}:5432"
+    command:
+      -c fsync=off
+  redis:
+    container_name: redis_inaturalist
+    image: redis:latest
+    # restart: always
+    networks:
+      - backend
+    ports:
+      - "6397:6379"
+networks:
+  frontend:
+      driver: bridge
+  backend:
+      driver: bridge
