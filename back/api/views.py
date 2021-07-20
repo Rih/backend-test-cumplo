@@ -11,15 +11,24 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from account.models import UserProfile
 from api.bl.inaturalist import INaturalist
+from api.bl.bigquery import BigQuery
 # Create your views here.
 
 
 class ObservationsView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        page = request.GET.get('page', 1)
+        results = BigQuery(user_id=request.user.id).select(int(page))
+        return Response(results)
+
     def post(self, request, *args, **kwargs):
         results = INaturalist().get_latest_obs(request.data['gps'])
-        return Response(results)
+        audit = BigQuery(
+            user_id=request.user.id
+        ).insert(request.data['gps'], results)
+        return Response({'results': results, 'audit': audit})
 
 
 class ProfilePicView(APIView):

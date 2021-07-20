@@ -247,3 +247,8 @@ LOGGING = {
         },
     },
 }
+
+GOOGLE_APP_CREDS_DIR ='/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test'
+APP_CREDS_NAME = 'exam-rodrigo-diaz-6ce020aad91d.json'
+BQ_PER_PAGE = 10
+# export GOOGLE_APPLICATION_CREDENTIALS=/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test/

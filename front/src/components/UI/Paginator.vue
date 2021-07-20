@@ -5,17 +5,17 @@
     </div>
 
     <div class="paginator__pages">
-      <div class="paginator__prev">Previo</div>
+      <div v-if="hasPrev" class="paginator__prev" @click="select(value - 1)">Previo</div>
       <div
         v-for="(item, i) in model"
         :key="i"
-        @click="select(i)"
+        @click="select(i + 1)"
         class="paginator__page"
         :class="{ paginator__page_active: item.isActive }"
       >
         {{ item.n }}
       </div>
-      <div class="paginator__next">Siguiente</div>
+      <div v-if="hasNext" class="paginator__next" @click="select(value + 1)">Siguiente</div>
     </div>
   </div>
 </template>
@@ -29,6 +29,8 @@ export default Vue.extend({
     value: Number,
     total: Number,
     start: Number,
+    hasPrev: Boolean,
+    hasNext: Boolean,
     end: Number
   },
   computed: {
@@ -43,7 +45,7 @@ export default Vue.extend({
       }
       
       if (data.length === 0) return []
-      data[this.value].isActive = true
+      data[this.value - 1].isActive = true
       return data
     }
   },
@@ -52,7 +54,7 @@ export default Vue.extend({
       this.model.forEach(el => {
         el.isActive = false
       })
-      this.model[i].isActive = true
+      this.model[i - 1].isActive = true
       this.$emit('input', i)
     }
   }

@@ -1,4 +1,4 @@
-import { LOGIN } from '@/store/init'
+import { LOGIN, SIGNUP } from '@/store/init'
 
 export default {
   START_LOADING: (state) => {
@@ -13,7 +13,7 @@ export default {
     state.user = payload.user
   },
   SET_CENTER: (state, payload) => {
-    state.center = [payload.latitude, payload.longitude]
+    state.center = [payload.lat, payload.lng]
   },
   SET_ZOOM: (state, payload) => {
     state.zoom = payload
@@ -22,13 +22,15 @@ export default {
     console.log(state, payload)
   },
   GET_LATEST_OBSERVATIONS: (state, payload) => {
-    state.observations = [...state.observations, ...payload.result]
+    if(!payload.audit){
+      console.log("NOT AUDIT ERROR")
+    }
+    state.observations = [...state.observations, ...payload.result.results]
   },
   VIEW_OBSERVATION: (state, payload) => {
     state.obs = payload
   },
   SET_AVATAR: (state, payload) => {
-    debugger //eslint-disable-line
     if (payload.success)
       state.user.picture = payload.avatar
     else
@@ -37,6 +39,9 @@ export default {
   CHANGE_TAB: (state, payload) => {
     for(const k of Object.keys(state.tabs))
       state.tabs[k].isActive = k == payload
+  },
+  GET_STATISTICS: (state, payload) => {
+    state.statistics = payload.result
   },
   SET_REQUESTING: (state) => {
     state.auth.requesting = true
@@ -50,8 +55,14 @@ export default {
   SET_LOGIN: (state, payload) => {
     state.login = { ...LOGIN, ...payload }
   },
+  SET_SIGN_UP: (state, payload) => {
+    state.signup = { ...SIGNUP, ...payload }
+  },
   RESET_LOGIN: (state) => {
     state.login = LOGIN
+  },
+  RESET_SIGNUP: (state) => {
+    state.signup = SIGNUP
   },
   SET_TOAST: (state, { type, msg }) => {
     state.toast = { type, msg, isActive: true }

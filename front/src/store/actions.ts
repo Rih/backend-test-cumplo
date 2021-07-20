@@ -52,11 +52,23 @@ export default {
   changeTab: ({ commit }, tabKey) => {
     commit('CHANGE_TAB', tabKey)
   },
+  getStatistics: async ({ commit }, payload) => {
+    const api = new API()
+    api.createEntity({ name: 'observations' })
+    const response = await api.endpoints.observations.get({queryParams: { page: payload }})
+    commit('GET_STATISTICS', response)
+  },
   setLogin: ({ commit }, payload) => {
     commit('SET_LOGIN', payload)
   },
+  setSignup: ({ commit }, payload) => {
+    commit('SET_SIGN_UP', payload)
+  },
   resetLogin: ({ commit }) => {
     commit('RESET_LOGIN')
+  },
+  resetSignup: ({ commit }) => {
+    commit('RESET_SIGNUP')
   },
   setToast: ({ commit }, payload) => {
     commit('SET_TOAST', payload)

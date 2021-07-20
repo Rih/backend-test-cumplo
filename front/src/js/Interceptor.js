@@ -5,6 +5,7 @@ import router from '@/router'
 import axiosInstance from '@/js/AxiosWrapper.js'
 
 const tokenURL = `${APP_BASE_URL}/api/token/`
+const signupURL = `${APP_BASE_URL}/account/signup/`
 const refreshURL = `${APP_BASE_URL}/api/token/refresh/`
 const verifyURL = `${APP_BASE_URL}/api/token/verify/`
 
@@ -29,7 +30,8 @@ class Interceptor {
     const { config } = response
 
     // User has signed in
-    if (config.url === tokenURL) {
+    if (config.url === tokenURL || config.url === signupURL) {
+      debugger //eslint-disable-line
       if (recaptcha.success) {
         this.setHeaders(access)
         const user = parseJwt(this.getAccessToken())
@@ -44,7 +46,7 @@ class Interceptor {
 
     // Access-Token hasn't expired yet
     if (config.url === verifyURL) {
-      router.push('/dashboard')
+      if (window.location.pathname !== '/dashboard') router.push('/dashboard')
       this.setHeaders()
       const user = parseJwt(this.getAccessToken())
       store.dispatch('setAuthenticated', { user })

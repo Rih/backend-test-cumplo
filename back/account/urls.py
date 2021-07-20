@@ -17,10 +17,10 @@ urlpatterns = [
         name='users'
     ),
     path(
-        'account/new',
+        'signup/',
         UserCreationView.as_view(),
         name='account_creation'
-    )    
+    )
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

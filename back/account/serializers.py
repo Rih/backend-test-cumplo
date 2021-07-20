@@ -1,6 +1,7 @@
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from account.models import UserProfile
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -19,6 +20,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['last_name'] = user.last_name
         token['first_name'] = user.first_name
         token['username'] = user.username
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        token['picture'] = profile.picture
         # token['recaptcha'] = cls.recaptchaToken
         return token
 
@@ -31,7 +34,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not response['success'] or response['score'] < RECAPTCHA_MIN_SCORE:
             del data['access']
             del data['refresh']
-
         data.update({'recaptcha': response})
         # and everything else you want to send in the response
         return data

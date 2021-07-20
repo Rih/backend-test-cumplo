@@ -9,28 +9,33 @@ from django.http import Http404
 
 
 def existing_user(**kwargs):
-        try:
-            if kwargs.get('email'):
-                return User.objects.get(
-                    email=kwargs.get('email'),
-                )
-            if kwargs.get('username'):
-                return User.objects.get(
-                    email=kwargs.get('username'),
-                )
-            return None
-        except User.DoesNotExist:
-            if kwargs.get('throw404'):
-                raise Http404
-            return None
+    try:
+        if kwargs.get('email'):
+            return User.objects.get(
+                email=kwargs.get('email'),
+            )
+        if kwargs.get('username'):
+            return User.objects.get(
+                email=kwargs.get('username'),
+            )
+        return None
+    except User.DoesNotExist:
+        if kwargs.get('throw404'):
+            raise Http404
+        return None
 
 
 def get_data(type, data):
     new_data = data.copy()
-    if type in ['password', 'validate', 'creation', 'recovery']:
+    if type in ['password']:
         new_data['password'] = make_password(new_data['password'])
     if type == 'creation':
-        new_data['username'] = new_data['email']
+        new_data['first_name'] = new_data['firstname']
+        new_data['last_name'] = new_data['lastname']
+        new_data['password'] = make_password(new_data['password'])
+        new_data['email'] = new_data['username']
+        del new_data['lastname']
+        del new_data['firstname']
     return new_data
 
 

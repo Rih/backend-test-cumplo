@@ -13,16 +13,14 @@
           <Icon>close</Icon>
         </MainBtn>
       </div>
-      <div
-        class="tips__tip-activer_text"
-      >Para consultar nombres en mayúscula debes agregar comillas dobles</div>
-      <div style="font-size: 14px">
-        Ej: SELECT id,
-        <span style="font-size: 20px">"</span>coor_GPS
-        <span style="font-size: 20px">",</span>
-        nombre FROM
-        <span style="font-size: 20px">"</span>BOSQUES
-        <span style="font-size: 20px">"</span>
+      <div class="tips__tip-activer_text">
+        - Mueve el mapa con gestos del mouse y da click en "Busca tu avatar"
+      </div>
+      <div class="tips__tip-activer_text">
+        - Escoje uno de los marcadores encontrados en la zona elegida
+      </div>
+      <div class="tips__tip-activer_text">
+        - Aparecerá en la siguiente pestaña la imagen encontrada que puedes asignar como tu avatar de perfil
       </div>
     </div>
   </div>
@@ -48,7 +46,7 @@ export default Vue.extend({
 .tips__tip
   background: whitesmoke
   width: 470px
-  color: #666
+  color: #777
   border-radius: 5px
   padding: 15px
   margin: 10px 0

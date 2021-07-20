@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Redirect from '../views/Redirect.vue'
 import { guard } from '@/guards'
@@ -13,6 +14,11 @@ const routes: Array<RouteConfig> = [
     name: 'login',
     component: Login,
     beforeEnter: (to, from, next) => guard(to, from, next),
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: Register,
   },
   {
     path: '/dashboard',

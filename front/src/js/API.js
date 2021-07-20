@@ -57,7 +57,6 @@ const presentToast = ({ error, toast, msg }) => {
 
 const responseHandler = (response, resolve, msg) => {
   presentToast({ msg })
-  debugger //eslint-disable-line
   resolve({ result: response.data, status: response.status })
 }
 

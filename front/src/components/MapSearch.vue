@@ -1,33 +1,37 @@
 <template>
   <div>
     <Card>
-      <div style="font-size: 20px; color: #444; margin-bottom: 10px">Busca tu imagen</div>
-      <div style="margin-left: 25px">
-          <MainBtn @click="onSearchObservations" large style="height: 43px">
-            BUSCAR
-            <Icon v-if="false">close</Icon>
-          </MainBtn>
-        </div>
-      <div style="display: flex; align-items: center">
-        <div id="map" style="width: 90%">
-          <l-map ref="myMap" :zoom.sync="zoom" :center.sync="center" :options="{zoomControl: false}">
+      <div style="display: flex; align-items: center; flex-direction: column; padding: 10px">
+        <Tips />
+        <MainBtn @click="onSearchObservations" large style="height: 43px">
+          BUSCA TU AVATAR
+          <Icon v-if="false">close</Icon>
+        </MainBtn>
+      </div>
+      <div style="display: flex; align-items: center; align-content: center">
+        <div id="map" style="width: 100%">
+          <l-map
+            ref="myMap"
+            :zoom.sync="zoom"
+            :center.sync="center"
+            :options="{zoomControl: false}"
+          >
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
             <l-marker ref="markerYou" :lat-lng="center">
-                <l-popup :content="'You are here'">
-                <slot id="default">
-                <!--
-                <l-image-overlay :url="img" :bounds="[center, [center[0] + 10.3, center[1] + 10.3]]" :bubblingMouseEvents="true" :zIndex="10"></l-image-overlay>
-                -->
-              </slot>
+              <l-popup :content="'Estas aqui'">
+                <slot id="default"></slot>
               </l-popup>
             </l-marker>
             <div v-if="observations.length">
-              <l-marker @click="(e) => setObservation(obs)" v-for="obs in observations" :lat-lng="{lat: obs.latitude, lng: obs.longitude}" :key="obs.uuid">
-              </l-marker>
+              <l-marker
+                @click="(e) => setObservation(obs)"
+                v-for="(obs, i) in observations"
+                :lat-lng="{lat: obs.latitude, lng: obs.longitude}"
+                :key="i"
+              ></l-marker>
             </div>
           </l-map>
         </div>
-        
       </div>
     </Card>
   </div>
@@ -35,6 +39,7 @@
 
 <script>
 import Card from '@/components/UI/Card.vue'
+import Tips from '@/components/Tips.vue'
 import MainBtn from '@/components/UI/MainBtn.vue'
 import Icon from '@/components/UI/Icon.vue'
 import { mapActions, mapState } from 'vuex'
@@ -44,7 +49,8 @@ export default {
   //   value: Object,
   // },
   data: () => ({
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Sydney_Opera_House_-_Dec_2008.jpg/1024px-Sydney_Opera_House_-_Dec_2008.jpg'
+    img:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Sydney_Opera_House_-_Dec_2008.jpg/1024px-Sydney_Opera_House_-_Dec_2008.jpg',
   }),
   methods: {
     async checkPermission() {
@@ -64,8 +70,8 @@ export default {
     },
     positionGranted(position) {
       this.setCenter({
-        latitude: position.coords.latitude.toFixed(7),
-        longitude: position.coords.longitude.toFixed(7),
+        lat: position.coords.latitude.toFixed(7),
+        lng: position.coords.longitude.toFixed(7),
       })
     },
     onSearchObservations() {
@@ -76,16 +82,21 @@ export default {
         sw: result._southWest,
       })
     },
-    setObservation(obs){
+    setObservation(obs) {
       this.viewObservation(obs)
       this.changeTab('obs')
     },
-    ...mapActions(['setCenter', 'getLatestObservations', 'viewObservation', 'changeTab']),
+    ...mapActions([
+      'setCenter',
+      'getLatestObservations',
+      'viewObservation',
+      'changeTab',
+    ]),
   },
   mounted() {
     this.checkPermission()
     this.$nextTick(() => {
-      console.log(this.$refs.myMap.mapObject)
+      //console.log(this.$refs.myMap.mapObject)
     })
   },
   computed: {
@@ -111,6 +122,7 @@ export default {
     Card,
     MainBtn,
     Icon,
+    Tips,
   },
 }
 </script>
@@ -119,6 +131,6 @@ export default {
   #map
     width: 500px
     height: 500px
-  img.huechange
-    filter: hue-rotate(120deg)
+    @media(min-width: 425px)
+      width: 90%
 </style>

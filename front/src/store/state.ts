@@ -1,4 +1,4 @@
-import { LOGIN, DEFAULT_GPS, DEFAULT_ZOOM } from '@/store/init'
+import { LOGIN, SIGNUP, DEFAULT_GPS, DEFAULT_ZOOM } from '@/store/init'
 
 export default {
   auth: {
@@ -44,6 +44,7 @@ export default {
     isActive: false,
   },
   login: { ...LOGIN },
+  signup: { ...SIGNUP },
   loadingElipse: {
     isActive: false,
   },
@@ -56,6 +57,14 @@ export default {
       { data: [], headers: [] },
     ],
     headers: [],
+  },
+  statistics: {
+    hasNext: false,
+    hasPrev: false,
+    total: 0,
+    current: 1,
+    totalCurrent: 0,
+    data: []
   },
   globalUI: {
     tableWidth: 900,

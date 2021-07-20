@@ -1,14 +1,11 @@
 <template>
   <div
     @click="clicked"
-    class="btnMenu__normal"
-    :class="{
-      btnMenu__active: active,
-      btn__shrink: shrink,
-    }"
+    class="btnMenu__normal btn__shrink"
+    :class="{btnMenu__active: active}"
   >
     <Icon :stroke="active ? 2 : 1" style="color: #6c7280">{{ icon }}</Icon>
-    <span v-if="!shrink" class="btnMenu__text">{{ text }}</span>
+    <span class="btnMenu__text">{{ text }}</span>
   </div>
 </template>
 
@@ -37,7 +34,7 @@ export default Vue.extend({
 <style lang="sass" scoped>
 .btnMenu__normal
   margin-top: 5px
-  padding: 10px
+  padding: 5px 10px
   display: flex
   align-items: center
   color: #666
@@ -50,9 +47,11 @@ export default Vue.extend({
 .btnMenu__text
   margin-left: 10px
   color: #333
+  @media(max-width: 425px)
+    display: none
 
 .btnMenu__active
-  padding: 10px
+  padding: 5px 10px
   border-radius: 3px
   background: #E4E7EB
   color: #242C3C
@@ -61,6 +60,4 @@ export default Vue.extend({
 .btnMenu__icon_active
   color: rgb(26, 32, 44)
 
-.btnMenu__textt
-  margin-left: 10px
 </style>

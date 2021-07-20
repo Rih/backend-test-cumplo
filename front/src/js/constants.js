@@ -36,45 +36,35 @@ export const ADMIN_MODE = 'admin mode'
 export const RESEARCH_MODE = 'researcher mode'
 export const PROPERTIES = 'properties'
 
-
 // ----------------------------------------
 //            Default table headers
 // ----------------------------------------
 export const ADMIN_TABLES = [
   {
-    field: 'nombre',
-    label: 'Tabla',
-    width: '400',
+    field: 'uri',
+    label: 'Recurso',
+    width: '150',
     searchable: true,
   },
   {
-    field: 'tipo',
-    label: 'Tipo',
-    searchable: true,
+    field: 'bbox',
+    label: 'Bounding Box',
+    width: '250',
   },
   {
-    field: 'accion',
-    label: 'Acción',
-    searchable: false,
-  }
+    field: 'results',
+    label: 'Resultado',
+  },
 ]
 
-export const ADMIN_COLUMNS = [
-  {
-    field: 'nombre',
-    label: 'Propiedad',
-    width: '400',
-    searchable: false,
-  },
-  {
-    field: 'tipo',
-    label: 'Tipo',
-    searchable: false,
-  },
-]
+export const PER_PAGE = 10
 
 export const APP_BASE_URL = process.env.VUE_APP_BASE_URL
 
 export const RECAPTCHA_KEY = process.env.VUE_APP_RECAPTCHA_V3
 
-export const DEFAULT_AVATAR = 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light'
+
+export const INATURALIST_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/INaturalist_text_logo.svg/320px-INaturalist_text_logo.svg.png'
+
+export const DEFAULT_AVATAR =
+  'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light'

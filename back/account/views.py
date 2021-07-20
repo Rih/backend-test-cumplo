@@ -47,7 +47,6 @@ class UserCreationView(APIView):
         if serializer.is_valid():
             serializer.save()
             result = request.data.copy()
-            result['username'] = request.data['email']
             tokens = MyTokenObtainPairSerializer(result).validate(
                 result,
                 recaptcha_result=response

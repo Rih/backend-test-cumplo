@@ -1,42 +1,17 @@
 <template>
   <div class="dashboard__container">
+    
     <div
-      class="dashboard__sidemenu"
-      :class="{ dashboard__sidemenu_shrink: globalUI.isSideMenuCollapsed }"
+      class="dashboard__content"
     >
-      <div v-if="!globalUI.isSideMenuCollapsed" class="dashboard__close-icon">
-        <MainBtn @click="onCollapse(true)" icon>
-          <Icon>close</Icon>
-        </MainBtn>
-      </div>
-      <div v-show="globalUI.isSideMenuCollapsed" class="dashboard__menu-icon">
-        <MainBtn @click="onCollapse(false)" icon>
-          <Icon>menu</Icon>
-        </MainBtn>
-      </div>
-
-      <div class="dashboard__logo-box">
+    <div class="dashboard__logo-box">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/INaturalist_text_logo.svg/320px-INaturalist_text_logo.svg.png"
-          style="width: 70%"
+          :src="logo"
+          class="dashboard__logo-img"
         />
       </div>
-
-      <div class="dashboard__v-spacer-10"></div>
-
-      <div class="dashboard__avatar">
-        <img :src="url" class="dashboard__avatar_img" />
-        <div v-if="!globalUI.isSideMenuCollapsed" class="dashboard__avatar_box">
-          <div class="dashboard__avatar_wrap">
-            <div class="dashboard__avatar_name">{{ user.first_name }}</div>
-          </div>
-          <div class="dashboard__avatar_username">{{ user.email }}</div>
-        </div>
-      </div>
-
-      <div class="dashboard__v-spacer-30"></div>
-
-      <div v-for="(item, i) in menu" :key="i">
+      <div class="dashboard__content_title">
+        <div v-for="(item, i) in menu" :key="i">
         <MenuBtn
           v-if="item.show"
           @click="onMenu(i, item.type)"
@@ -46,28 +21,33 @@
           :shrink="globalUI.isSideMenuCollapsed"
         />
       </div>
-    </div>
-    <div
-      class="dashboard__content"
-      :class="{ dashboard__content_shrink: globalUI.isSideMenuCollapsed }"
-    >
-      <div class="dashboard__content_title">
-        <div>{{ type }}</div>
+      <div class="dashboard__avatar">
+        <img :src="user.picture" class="dashboard__avatar_img" />
+        <div class="dashboard__avatar_box">
+          <div class="dashboard__avatar_wrap">
+            <div class="dashboard__avatar_name">{{ user.first_name }}</div>
+          </div>
+          <div class="dashboard__avatar_username">{{ user.email }}</div>
+        </div>
+      </div>
         <MainBtn @click="onLogout" small outline>
-          <Icon style="margin-right: 5px">logout</Icon>Salir
+          <Icon style="margin-right: 5px">logout</Icon>
+          <span class="dashboard__exit">Salir</span>
         </MainBtn>
       </div>
       <Home v-if="menu[0].isActive" />
+      <Statistics v-if="menu[1].isActive" />
     </div>
   </div>
 </template>
 
 <script>
 import Home from '@/views/Home.vue'
+import Statistics from '@/views/Statistics.vue'
 import MenuBtn from '@/components/UI/MenuBtn.vue'
 import Icon from '@/components/UI/Icon.vue'
 import MainBtn from '@/components/UI/MainBtn.vue'
-import { DEFAULT_AVATAR } from '@/js/constants'
+import { INATURALIST_LOGO } from '@/js/constants'
 import { mapState, mapActions } from 'vuex'
 
 
@@ -76,6 +56,7 @@ export default {
     return {
       isTag1Active: true,
       type: 'Inicio',
+      logo: INATURALIST_LOGO,
       menu: [
         {
           title: 'Inicio',
@@ -87,9 +68,9 @@ export default {
         {
           title: 'Estadistica',
           type: 'Estadistica',
-          icon: 'home',
+          icon: 'menu',
           isActive: false,
-          show: false,
+          show: true,
         },
       ],
     }
@@ -113,15 +94,8 @@ export default {
     ...mapActions(['setUnauthenticated', 'setGlobalUI']),
   },
   watch: {
-    
   },
   computed: {
-    url(){
-      if (!this.user.profile){
-        return DEFAULT_AVATAR
-      }
-      return this.user.profile
-    },
     ...mapState(['globalUI', 'user']),
   },
   mounted() {
@@ -134,6 +108,7 @@ export default {
   },
   components: {
     Home,
+    Statistics,
     MenuBtn,
     Icon,
     MainBtn,
@@ -148,6 +123,13 @@ export default {
   left: 0
   width: 100%
   height: 100%
+
+.dashboard__logo-img
+  width: 200px
+  
+  @media(max-width: 425px)
+    width: 70%
+    align: center
 
 .dashboard__sidemenu
   position: fixed
@@ -189,6 +171,12 @@ export default {
 
 .dashboard__avatar_box
   margin-left: 10px
+  @media(max-width: 425px)
+    display: none
+
+.dashboard__exit
+  @media(max-width: 425px)
+    display: none
 
 .dashboard__avatar_name
   font-weight: 600
@@ -196,12 +184,6 @@ export default {
 
 .dashboard__avatar_username
   color: #828894
-
-.dashboard__content
-  margin-left: 270px
-
-.dashboard__content_shrink
-  margin-left: 80px
 
 .dashboard__content_title
   padding: 20px 20px

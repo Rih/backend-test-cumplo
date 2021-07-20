@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Buefy from 'buefy'
+import EnlargeableImage from '@diracleo/vue-enlargeable-image'
 import 'buefy/dist/buefy.css'
 import { LMap, LTileLayer, LMarker, LPopup, LImageOverlay, LIcon } from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -23,6 +24,7 @@ Vue.component('l-marker', LMarker)
 Vue.component('l-popup', LPopup)
 Vue.component('l-icon', LIcon)
 Vue.component('l-image-overlay', LImageOverlay)
+Vue.component('enlargeable-image', EnlargeableImage)
 
 new Vue({
   router,

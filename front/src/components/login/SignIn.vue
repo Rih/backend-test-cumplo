@@ -7,19 +7,12 @@
       placeholder="ejemplo@gmail.com"
     />
 
-    <MainInput
-      v-model="password"
-      large
-      type="password"
-      label="Contraseña"
-      placeholder="*******"
-    />
+    <MainInput v-model="password" large type="password" label="Contraseña" placeholder="*******" />
 
-    <Recaptcha
-      @captchaOk="onSubmit"
-      :disable="!isValid"
-      text="Iniciar sesión"
-    />
+    <Recaptcha @captchaOk="onSubmit" :disable="!isValid" text="Iniciar sesión" />
+    <div style="text-align: center; margin-top: 10px">
+      <router-link to="/signup">No tengo una cuenta</router-link>
+    </div>
   </div>
 </template>
 
@@ -30,7 +23,6 @@ import MainInput from '@/components/UI/MainInput.vue'
 import Recaptcha from '@/components/Recaptcha.vue'
 import API from '@/js/API.js'
 import { APP_BASE_URL } from '@/js/constants'
-
 
 export default Vue.extend({
   props: {
@@ -55,7 +47,7 @@ export default Vue.extend({
         password: this.password,
         recaptchaToken,
       }
-      api.endpoints.token.create(payload).then(async ({ error, result }) => {
+      api.endpoints.token.post(payload).then(async ({ error, result }) => {
         if (!error) {
           this.$router.push('dashboard')
         }
@@ -68,11 +60,7 @@ export default Vue.extend({
         }
       })
     },
-    ...mapActions([
-      'setRequesting',
-      'setLogin',
-      'resetLogin',
-    ]),
+    ...mapActions(['setRequesting', 'setLogin', 'resetLogin']),
   },
   mounted() {
     this.resetLogin()
