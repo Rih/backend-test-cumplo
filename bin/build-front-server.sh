@@ -1,4 +1,6 @@
 #!/bin/bash
 
-cd front
+cd /front
+# yarn install
+# yarn global add @vue/cli
 npx vue-cli-service build

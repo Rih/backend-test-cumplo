@@ -14,10 +14,9 @@ services:
       - "8080:8080" # front dev = index.html
       - "80:80" # front = index.html
     volumes:
-      - ./bin:/usr/local/scripts
-      - ./front:/front
-      - ./nginx:/nginx
-      - ./static:/static
+      - ../bin:/usr/local/scripts
+      - ./:/front
+      - ../nginx:/nginx
     # restart: always
     tty: true
 networks:

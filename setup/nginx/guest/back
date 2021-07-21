@@ -18,14 +18,14 @@
 ##
 
 server {
-	listen 84;
+	listen 80;
 #	listen [::]:80 ipv6only=on;
 
-#	root /app/ifn;
+#	root /app/inaturalist;
 #	index index.php index.html index.htm wsgi.py;
 
 	# Make site accessible from http://localhost/
-	server_name localhost;
+	server_name 104.155.145.109;
 	#add_header 'Access-Control-Allow-Origin' "$http_origin" always;
 
 	location / {
@@ -63,7 +63,7 @@ server {
 		}
 
 		if ($request_method = 'POST') {
-			#add_header 'Access-Control-Allow-Origin' 'http://visualizador.sistematiza.cl';
+			#add_header 'Access-Control-Allow-Origin' '*';
 			#add_header 'Access-Control-Allow-Origin' '*';
 			add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
 			add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
@@ -71,7 +71,7 @@ server {
 		}
 		
 		if ($request_method = 'PATCH') {
-			#add_header 'Access-Control-Allow-Origin' 'http://visualizador.sistematiza.cl';
+			#add_header 'Access-Control-Allow-Origin' '*';
 			#add_header 'Access-Control-Allow-Origin' '*';
 			add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
 			add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
@@ -79,7 +79,7 @@ server {
 		}
 
 		if ($request_method = 'PUT') {
-			#add_header 'Access-Control-Allow-Origin' 'http://visualizador.sistematiza.cl';
+			#add_header 'Access-Control-Allow-Origin' '*';
 			#add_header 'Access-Control-Allow-Origin' '*';
 			add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
 			add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
@@ -87,7 +87,7 @@ server {
 		}
 		
 		if ($request_method = 'DELETE') {
-			#add_header 'Access-Control-Allow-Origin' 'http://visualizador.sistematiza.cl';
+			#add_header 'Access-Control-Allow-Origin' '*';
 			#add_header 'Access-Control-Allow-Origin' '*';
 			add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
 			add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
