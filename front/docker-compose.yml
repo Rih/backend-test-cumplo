@@ -1,0 +1,25 @@
+version: '3'
+services:
+  front:
+    container_name: app_front_inaturalist
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    image: inaturalist_front/ubuntu:v1f
+    networks:
+      - frontend
+    ports:
+      - "8002:82" #  proxy -> front
+      - "8001:81" # front = index.html
+      - "8080:8080" # front dev = index.html
+      - "80:80" # front = index.html
+    volumes:
+      - ./bin:/usr/local/scripts
+      - ./front:/front
+      - ./nginx:/nginx
+      - ./static:/static
+    # restart: always
+    tty: true
+networks:
+  frontend:
+      driver: bridge
