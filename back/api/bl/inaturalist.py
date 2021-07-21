@@ -16,7 +16,7 @@ class INaturalist:
 
     def get_header(self, tkn: str = None):
         header = {
-            # 'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         }
         if tkn:
             header.update({'Authorization': f'Bearer {tkn}'})
@@ -31,19 +31,20 @@ class INaturalist:
         url = f'{self.base_url}/oauth/authorize?{query_params}'
         return url
 
-    def get_inat_settings(self) -> str:
+    def get_inat_settings(self) -> INaturalistSettings:
         inat = INaturalistSettings.objects.filter(expired=False).last()
         return inat
 
     def set_auth_code(self, code: str) -> INaturalistSettings:
+        # expired previous settings
         INaturalistSettings.objects.filter(expired=False).update(expired=True)
         isettings = INaturalistSettings.objects.create(
             auth_code=code
         )
         return isettings
 
-    def get_oauth_token(self) -> str:
-        inat = self.get_inat_settings()
+    def get_oauth_token(self, code: str) -> str:
+        inat = self.set_auth_code(code)
         url = f'{self.base_url}/oauth/token'
         payload = {
             'client_id': settings.INAT_CLIENT_ID,
@@ -63,9 +64,9 @@ class INaturalist:
         return result.get('access_token')
 
     def get_latest_obs(self, gps: dict) -> list:
-        inat = self.get_inat_settings()
+        # inat = self.get_inat_settings()
         url = f'{self.base_url}/observations.json'
-        head = self.get_header(inat.token)
+        # head = self.get_header(inat.token)
         payload = {
             'page': 0,
             'per_page': settings.INAT_PER_PAGE,

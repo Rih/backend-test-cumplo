@@ -1,8 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import requests
 from django.conf import settings
-import json
-
-RECAPTCHA_TEST = 'tokenCaptcha123'
 
 
 def validate_captcha(client_token):
@@ -13,6 +12,6 @@ def validate_captcha(client_token):
             'response': client_token
         }
     )
-    resp = json.loads(response.content)
+    resp = response.json()
     resp.update({'client_token': client_token})
     return resp

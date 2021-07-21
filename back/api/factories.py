@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+# Standard libs
 import factory
-from factory import SubFactory
 from api.models import INaturalistSettings
 
 

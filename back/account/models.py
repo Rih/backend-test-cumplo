@@ -6,6 +6,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from api.models import Apimodel
 # Own libs
+from account.data import AVATAR_URL, AVATAR_OPTS
+from account.bl import utils
 
 log = logging.getLogger(__name__)
 
@@ -13,11 +15,10 @@ log = logging.getLogger(__name__)
 
 
 class UserProfile(Apimodel):
-    DEFAULT_AVATAR = 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light'
+    DEFAULT_AVATAR = f'{AVATAR_URL}?{utils.to_queryparams(AVATAR_OPTS)}'
     picture = models.TextField(default=DEFAULT_AVATAR)
     user = models.OneToOneField(
         get_user_model(),
         related_name='profile',
         on_delete=models.CASCADE
     )
-

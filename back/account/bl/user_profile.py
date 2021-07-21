@@ -2,8 +2,9 @@
 # Django libs
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
-User = get_user_model()
 from django.http import Http404
+
+User = get_user_model()
 
 # Own libs
 
@@ -25,11 +26,11 @@ def existing_user(**kwargs):
         return None
 
 
-def get_data(type, data):
+def get_data(mode, data):
     new_data = data.copy()
-    if type in ['password']:
+    if mode in ['password']:
         new_data['password'] = make_password(new_data['password'])
-    if type == 'creation':
+    if mode == 'creation':
         new_data['first_name'] = new_data['firstname']
         new_data['last_name'] = new_data['lastname']
         new_data['password'] = make_password(new_data['password'])
@@ -37,6 +38,3 @@ def get_data(type, data):
         del new_data['lastname']
         del new_data['firstname']
     return new_data
-
-
-

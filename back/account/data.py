@@ -1,19 +1,20 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 RECAPTCHA_MIN_SCORE = 0.4
 
-GENDER_OPTIONS = (
-    (1, 'Femenino'),
-    (2, 'Masculino'),
-)
+AVATAR_OPTS = {
+    'avatarStyle': 'Transparent',
+    'topType': 'ShortHairShortCurly',
+    'accessoriesType': 'Prescription02',
+    'hairColor': 'Black',
+    'facialHairType': 'Blank',
+    'clotheType': 'Hoodie',
+    'clotheColor': 'White',
+    'eyeType': 'Default',
+    'eyebrowType': 'DefaultNatural',
+    'mouthType': 'Default',
+    'skinColor': 'Light',
+}
 
-
-USER_TYPES = (
-    (1, 'Académico'),
-    (2, 'Estudiante'),
-    (3, 'Pequeño Propietario'),
-    (4, 'Pyme'),
-    (5, 'Gran Empresa'),
-    (6, 'ONG'),
-    (7, 'Organización o asociación'),
-    (8, 'Otros usuarios'),
-)
+AVATAR_URL = 'https://avataaars.io/'

@@ -1,5 +1,5 @@
 from django.urls import include, path
-from .views import *
+from account.views import UserCreationView
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -9,12 +9,6 @@ urlpatterns = [
     path(
         'api-auth/',
         include('rest_framework.urls', namespace='rest_framework')
-    ),
-    #
-    path(
-        'user/<int:pk>',
-        UserDetail.as_view(),
-        name='users'
     ),
     path(
         'signup/',

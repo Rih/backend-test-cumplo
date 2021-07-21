@@ -15,11 +15,10 @@ services:
       - "8005:8081" # backend = django
       - "80:80" # backend = django
     volumes:
-      - ./back:/app
-      - ./bin:/usr/local/scripts
-      - ./nginx:/nginx
-      - ./static:/static
-      - ./media:/app_media
+      - ./:/app
+      - ../bin:/usr/local/scripts
+      - ../nginx:/nginx
+      - ../static:/static
     environment:
       FRONT_URL: ${FRONT_URL}
       DRF_RECAPTCHA_SECRET_V3: ${DRF_RECAPTCHA_SECRET_V3}

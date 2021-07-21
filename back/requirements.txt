@@ -26,4 +26,5 @@ moz-sql-parser==4.5.20343
 pycrypto==2.6.1
 cryptography==3.3.1
 django-redis==4.12.1
+flake8==3.8.3
 google-cloud-bigquery==2.21.0

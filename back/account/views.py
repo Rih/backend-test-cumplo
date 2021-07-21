@@ -1,24 +1,21 @@
-from django.shortcuts import render
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from account.serializers import (
     MyTokenObtainPairSerializer,
-    UserSerializer,
-    UserModelSerializer,
-    UserCreationModelSerializer
+    UserCreationModelSerializer,
 )
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.http import Http404
 from rest_framework import status
-# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-User = get_user_model()
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
-from account.bl import user_profile, recaptcha, role
+from account.bl import user_profile, recaptcha
 
-# Create your views here.
+
+User = get_user_model()
 
 
 # returns { refresh, access, recaptcha }
@@ -58,31 +55,3 @@ class UserCreationView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-
-
-class UserModelView(APIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserModelSerializer
-
-    def get_object(self):
-        try:
-            return User.objects.get(pk=self.request.user.pk)
-        except User.DoesNotExist:
-            raise Http404
-
-
-class UserDetail(APIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
-
-    def get_object(self, pk):
-        try:
-            return User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            raise Http404
-
-    def get(self, request, *args, **kwargs):
-        user = self.get_object(kwargs.get('pk')) if kwargs.get('pk') else self.get_object(request.user.id)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)

@@ -1,6 +1,7 @@
-# from django.contrib.auth.models import User
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.contrib.auth import get_user_model
-User = get_user_model()
 from account.models import UserProfile
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -8,21 +9,22 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from account.data import RECAPTCHA_MIN_SCORE
 
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+User = get_user_model()
 
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         # Add custom claims
+        profile, _ = UserProfile.objects.get_or_create(user=user)
         token['pk'] = user.pk
         token['email'] = user.email
         token['last_name'] = user.last_name
         token['first_name'] = user.first_name
         token['username'] = user.username
-        profile, _ = UserProfile.objects.get_or_create(user=user)
         token['picture'] = profile.picture
-        # token['recaptcha'] = cls.recaptchaToken
         return token
 
     def validate(self, attrs, **kwargs):
@@ -63,4 +65,3 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
-

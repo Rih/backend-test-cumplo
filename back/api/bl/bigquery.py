@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import json, os
+import os
+import json
 from google.cloud import bigquery
 from datetime import datetime
 from django.conf import settings
@@ -26,11 +27,14 @@ class BigQuery:
     def __init__(self, **kwargs):
         self.user_id = kwargs['user_id']
         self.per_page = settings.BQ_PER_PAGE
-        self.client = bigquery.Client()
+        self.client = self.get_client()
+
+    def get_client(self):
+        return bigquery.Client()
 
     def select(self, page: int = 1) -> dict:
         page = 0 if page < 1 else page - 1
-        dataset_ref = self.client.dataset(self.bq_dataset)
+        # dataset_ref = self.client.dataset(self.bq_dataset)
         query_str = self.query_template.format(
             gcp_project=self.gcp_project,
             bq_dataset=self.bq_dataset,
@@ -41,9 +45,9 @@ class BigQuery:
         res = query_job.result()
         total = res.total_rows
         destination = query_job.destination
-        destination = self.client.get_table(destination)
+        dest = self.client.get_table(destination)
         results_obj = self.client.list_rows(
-            destination,
+            dest,
             start_index=page * self.per_page,
             max_results=self.per_page
         )
@@ -58,7 +62,6 @@ class BigQuery:
             }
             for row in results_obj
         ]
-
         return {
             'data': results,
             'hasPrev': page > 0,
@@ -69,7 +72,7 @@ class BigQuery:
             'total': total
         }
 
-    def insert(self, gps: dict, results: dict) -> dict:
+    def insert(self, gps: dict, results: dict) -> bool:
 
         # Construct a BigQuery client object.
         table_id = f'{self.gcp_project}.{self.bq_dataset}.{self.bq_table_name}'
@@ -91,4 +94,4 @@ class BigQuery:
             print("New rows have been added.")
         else:
             print("Encountered errors while inserting rows: {}".format(errors))
-        return not(errors)
+        return not errors

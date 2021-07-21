@@ -1,5 +1,9 @@
-from django.urls import include, path
-from .views import *
+from django.urls import path
+from api.views import (
+    ObservationsView,
+    ProfilePicView,
+    INaturalistView,
+)
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -14,6 +18,11 @@ urlpatterns = [
         'profile/',
         ProfilePicView.as_view(),
         name='profile'
+    ),
+    path(
+        'inaturalist/<str:mode>',
+        INaturalistView.as_view(),
+        name='inaturalist'
     ),
 ]
 

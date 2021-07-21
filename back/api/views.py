@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 from rest_framework import status
 # Own libs
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
 from account.models import UserProfile
 from api.bl.inaturalist import INaturalist
 from api.bl.bigquery import BigQuery
@@ -48,3 +47,24 @@ class ProfilePicView(APIView):
                 user=user
             )
         return Response(status=status.HTTP_200_OK)
+
+
+class INaturalistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        code = request.GET.get('code')
+        if kwargs['mode'] == 'request':  # step 1
+            return Response(
+                {'url': INaturalist().get_auth_code_url()},
+                status=status.HTTP_200_OK
+            )
+        if kwargs['mode'] == 'token' and code:  # step 2
+            return Response(
+                {
+                    'code': code,
+                    'tkn': INaturalist().get_oauth_token(code)
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(status=status.HTTP_400_BAD_REQUEST)
