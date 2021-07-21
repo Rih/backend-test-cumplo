@@ -116,3 +116,5 @@ backend/media/**/*.png
 *_index.js.LICENSE
 /node_modules/
 package-lock.json
+setup/*.json
+back/setup/*.json

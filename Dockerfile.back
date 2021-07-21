@@ -17,14 +17,13 @@ COPY ./back/requirements.txt /app/tmp/
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3.7 get-pip.py
 RUN python3.7 -m pip install uwsgi
 RUN python3.7 -m pip install -r /app/tmp/requirements.txt
+COPY ./setup/ /app/setup/
 COPY ./back/inaturalist/uwsgi.conf /etc/init.d/uwsgi.conf
 COPY ./back/inaturalist/uwsgi.ini /uwsgi.ini
 COPY ./entrypoint-back.sh /usr/local/entrypoint-back.sh
 RUN chmod +x /etc/init.d/uwsgi.conf
 RUN chmod +x /usr/local/entrypoint-back.sh
-COPY ./back/media/* /app_media/
 RUN touch /var/log/inaturalist_uwsgi.log && chown www-data:www-data /var/log/inaturalist_uwsgi.log
-RUN chmod -R 766 /app_media && chown -R www-data:www-data /app_media
 
 # Set the locale
 RUN locale-gen es_CL.UTF-8

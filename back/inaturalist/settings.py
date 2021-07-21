@@ -66,7 +66,6 @@ INSTALLED_APPS += [
 # 3rd party apps
 
 INSTALLED_APPS += [
-    'captcha',
     'rest_framework',
     'drf_multiple_model',
     'corsheaders',
@@ -248,7 +247,8 @@ LOGGING = {
     },
 }
 
-GOOGLE_APP_CREDS_DIR ='/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test'
+# GOOGLE_APP_CREDS_DIR ='/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test'
+GOOGLE_APP_CREDS_DIR = os.path.join(BASE_DIR, 'setup')
 APP_CREDS_NAME = 'exam-rodrigo-diaz-6ce020aad91d.json'
 BQ_PER_PAGE = 10
 # export GOOGLE_APPLICATION_CREDENTIALS=/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test/

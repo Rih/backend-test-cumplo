@@ -9,15 +9,11 @@ services:
     networks:
       - frontend
     ports:
-      - "8010:86" # public docs
-      - "8008:83" #  proxy -> backend
-      - "8007:82" # extractor
-      - "8006:81" # visualizador/xstock
+      - "8002:82" #  proxy -> front
+      - "8001:81" # front = index.html
     volumes:
       - ./bin:/usr/local/scripts
-      - ./frontend:/front
-      - ./extractor:/extractor
-      - ./docs:/docs
+      - ./front:/front
       - ./nginx:/nginx
       - ./static:/static
     # restart: always
@@ -37,14 +33,22 @@ services:
     ports:
       - "0.0.0.0:${WEB_HTTPS_PORT}:443"
       - "0.0.0.0:${WEB_HTTP_DEV_PORT}:8000"
-      - "8009:84" #  proxy -> backend
+      - "8009:84" #  nginx proxy -> backend
       - "8005:8081" # backend = django
     volumes:
-      - ./backend:/app
+      - ./back:/app
       - ./bin:/usr/local/scripts
       - ./nginx:/nginx
       - ./static:/static
       - ./media:/app_media
+    environment:
+      FRONT_URL: ${FRONT_URL}
+      DRF_RECAPTCHA_SECRET_V3: ${DRF_RECAPTCHA_SECRET_V3}
+      INAT_CLIENT_ID: ${INAT_CLIENT_ID}
+      INAT_SECRET: ${INAT_SECRET}
+      GCP_BQ_CREDS_JSON: ${GCP_BQ_CREDS_JSON} # Bigquery app_creds
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
     # restart: always
     depends_on:
       - db
