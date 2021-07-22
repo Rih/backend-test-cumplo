@@ -25,7 +25,7 @@ export default {
       key: 'map',
     },
     obs: {
-      name: 'Observación',
+      name: 'Observaciones',
       isActive: false,
       key: 'obs',
     },
@@ -47,16 +47,6 @@ export default {
   signup: { ...SIGNUP },
   loadingElipse: {
     isActive: false,
-  },
-  apiCalls: {
-    data: [
-      { data: [], headers: [] },
-      { data: [], headers: [] },
-      { data: [], headers: [] },
-      { data: [], headers: [] },
-      { data: [], headers: [] },
-    ],
-    headers: [],
   },
   statistics: {
     hasNext: false,

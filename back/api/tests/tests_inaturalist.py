@@ -50,7 +50,7 @@ class INaturalistTest(TestCase):
             {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer eyASDF'
-             }
+            }
         )
 
     @tag('oauth_auth_code_url')
@@ -71,7 +71,6 @@ class INaturalistTest(TestCase):
     @patch('requests.post')
     def test_inaturalist_oauth_get_token(self, req_mock):
         # python3.7 manage.py test --tag=oauth_get_oauth_token
-        # python3.7 manage.py test api.tests.tests_inaturalist.INaturalistTest.test_inaturalist_oauth_get_token
         INaturalistSettingsFactory.create(
             auth_code=self.auth_code
         )
@@ -96,7 +95,6 @@ class INaturalistTest(TestCase):
     @patch('requests.get')
     def test_inaturalist_oauth_get_latest_observations(self, req_mock):
         # python3.7 manage.py test --tag=oauth_get_latest_obs
-        # python3.7 manage.py test api.tests.tests_inaturalist.INaturalistTest.test_inaturalist_oauth_get_latest_observations
         INaturalistSettingsFactory.create(
             auth_code=self.auth_code,
             token=self.token,

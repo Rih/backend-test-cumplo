@@ -2,10 +2,15 @@
 from __future__ import unicode_literals
 
 # Django libs
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.views.decorators.vary import vary_on_headers
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
+from django.conf import settings
 # Own libs
 from django.contrib.auth import get_user_model
 from account.models import UserProfile
@@ -14,7 +19,10 @@ from api.bl.bigquery import BigQuery
 # Create your views here.
 
 
-class ObservationsView(APIView):
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
+
+class AuditObservationsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -22,12 +30,29 @@ class ObservationsView(APIView):
         results = BigQuery(user_id=request.user.id).select(int(page))
         return Response(results)
 
-    def post(self, request, *args, **kwargs):
-        results = INaturalist().get_latest_obs(request.data['gps'])
+
+class ObservationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @method_decorator(cache_page(CACHE_TTL))
+    @method_decorator(vary_on_headers('Authorization', ))
+    def get(self, request, *args, **kwargs):
+        gps = {
+            'ne': {
+                'lat': request.GET.get('nelat'),
+                'lng': request.GET.get('nelng')
+            },
+            'sw': {
+                'lat': request.GET.get('swlat'),
+                'lng': request.GET.get('swlng'),
+            },
+        }
+        results = INaturalist().get_latest_obs(gps)
         audit = BigQuery(
             user_id=request.user.id
-        ).insert(request.data['gps'], results)
+        ).insert(gps, results)
         return Response({'results': results, 'audit': audit})
+
 
 
 class ProfilePicView(APIView):

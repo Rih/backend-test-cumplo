@@ -31,7 +31,6 @@ class Interceptor {
 
     // User has signed in
     if (config.url === tokenURL || config.url === signupURL) {
-      debugger //eslint-disable-line
       if (recaptcha.success) {
         this.setHeaders(access)
         const user = parseJwt(this.getAccessToken())
@@ -46,7 +45,11 @@ class Interceptor {
 
     // Access-Token hasn't expired yet
     if (config.url === verifyURL) {
-      if (window.location.pathname !== '/dashboard') router.push('/dashboard')
+      if (
+        window.location.pathname !== '/dashboard' &&
+        window.location.pathname !== '/refresh' &&
+        window.location.pathname !== '/redirect'
+      ) router.push('/dashboard')
       this.setHeaders()
       const user = parseJwt(this.getAccessToken())
       store.dispatch('setAuthenticated', { user })

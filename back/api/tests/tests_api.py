@@ -5,6 +5,7 @@ from account.factories import UserAccountFactory
 from api.factories import INaturalistSettingsFactory
 from django.urls import reverse
 from unittest.mock import patch
+from account.bl import utils
 from account.tests.mocks import RequestMock
 from api.tests.mocks import bquerymock, API_RESPONSE
 from django.test.utils import override_settings, tag
@@ -30,8 +31,8 @@ class ApiTest(APITestCase):
         self.user.set_password('pass')
         self.user.save()
         self.client.login(username='test@xstock.com', password='pass')
-        self.auth_code = '8f80edb0349811ca0a4ff7f0e2e2aa85669118d5df083c7c792fdce1fd9ce538'
-        self.token = '6985ab3317f65dcefc7d35ea2879990084995310e8d9cc568c19b0b1a57358c9'
+        self.auth_code = 'code'
+        self.token = 'tkn'
         self.client = APIClient()
 
     @tag('api_get_observations_audit')
@@ -39,12 +40,11 @@ class ApiTest(APITestCase):
     def test_api_get_observations_audit(self, bq_mock):
         # python3.7 manage.py test --tag=api_get_observations_audit
         bq_mock.return_value = bquerymock().Client()
-        url = reverse('api:observations')
+        url = reverse('api:audit')
         params = {'page': 1}
         self.client.force_authenticate(self.user)
         res = self.client.get(
-            url,
-            params=params,
+            f'{url}?{utils.to_queryparams(params)}',
             content_type='application/json'
         )
         result = json.loads(res.content)
@@ -54,11 +54,11 @@ class ApiTest(APITestCase):
         )
         self.assertTrue(len(result['data']) > 0)
 
-    @tag('api_post_latest_obs')
+    @tag('api_get_latest_obs')
     @patch('requests.get')
     @patch('api.bl.bigquery.BigQuery.get_client')
-    def test_api_post_latest_observations(self, bq_mock, req_mock):
-        # python3.7 manage.py test --tag=api_post_latest_obs
+    def test_api_get_latest_observations(self, bq_mock, req_mock):
+        # python3.7 manage.py test --tag=api_get_latest_obs
         # python3.7 manage.py test api.tests.tests_api.ApiTest.test_api_post_latest_observations
         bq_mock.return_value = bquerymock().Client()
         req_mock.return_value = RequestMock(
@@ -71,20 +71,14 @@ class ApiTest(APITestCase):
         )
         url = reverse('api:observations')
         gps = {
-            'ne': {
-                'lat': -39.80847010729648,
-                'lng': -73.18482398986818,
-            },
-            'sw': {
-                'lat': -39.84142929280931,
-                'lng': -73.23220252990724,
-            }
+            'nelat': -39.80847010729648,
+            'nelng': -73.18482398986818,
+            'swlat': -39.84142929280931,
+            'swlng': -73.23220252990724,
         }
-        payload = {'gps': gps}
         self.client.force_authenticate(self.user)
-        res = self.client.post(
-            url,
-            json.dumps(payload),
+        res = self.client.get(
+            f'{url}?{utils.to_queryparams(gps)}',
             content_type='application/json'
         )
         result = json.loads(res.content)

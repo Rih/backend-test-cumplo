@@ -20,6 +20,9 @@ services:
       - ../nginx:/nginx
       - ../static:/static
     environment:
+      DEBUG: ${DEBUG}
+      ENVIRONMENT: ${ENVIRONMENT}
+      DJANGO_SECRET: ${DJANGO_SECRET}
       FRONT_URL: ${FRONT_URL}
       DRF_RECAPTCHA_SECRET_V3: ${DRF_RECAPTCHA_SECRET_V3}
       INAT_CLIENT_ID: ${INAT_CLIENT_ID}

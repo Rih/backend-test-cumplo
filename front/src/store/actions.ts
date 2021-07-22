@@ -1,5 +1,4 @@
 import API from '@/js/API'
-import { APP_BASE_URL } from '@/js/constants'
 
 export default {
   startLoading: ({ commit }) => {
@@ -11,8 +10,8 @@ export default {
   setAuthenticated: ({ commit }, payload) => {
     const { refresh, access } = payload
     if (refresh && access) {
-      localStorage.setItem('tkn', payload.access)
-      localStorage.setItem('ref', payload.refresh)
+      localStorage.setItem('tkn', access)
+      localStorage.setItem('ref', refresh)
     }
     commit('SET_AUTHENTICATED', payload)
   },
@@ -30,13 +29,17 @@ export default {
   setZoom: ({ commit }, payload) => {
     commit('SET_ZOOM', payload)
   },
-  updateAuthCode: ({ commit }, payload) => {
-    commit('UPDATE_AUTH_CODE', payload)
-  },
-  getLatestObservations: async ({ commit }, payload) => {
+  getLatestObservations: async ({ commit }, { ne, sw }) => {
     const api = new API()
     api.createEntity({ name: 'observations' })
-    const result = await api.endpoints.observations.post({ gps: payload })
+    const result = await api.endpoints.observations.get({
+      queryParams: {
+        nelat: ne.lat,
+        nelng: ne.lng,
+        swlat: sw.lat,
+        swlng: sw.lng,
+      },
+    })
     commit('GET_LATEST_OBSERVATIONS', result)
   },
   viewObservation: ({ commit }, payload) => {
@@ -44,7 +47,7 @@ export default {
   },
   assignAvatar: async ({ commit }, payload) => {
     const api = new API()
-    const avatar = payload.photos[0].thumb_url
+    const avatar = payload.thumb_url
     api.createEntity({ name: 'profile' })
     const response = await api.endpoints.profile.post({ obs: avatar })
     commit('SET_AVATAR', { success: response.status === 200, avatar })
@@ -54,8 +57,10 @@ export default {
   },
   getStatistics: async ({ commit }, payload) => {
     const api = new API()
-    api.createEntity({ name: 'observations' })
-    const response = await api.endpoints.observations.get({queryParams: { page: payload }})
+    api.createEntity({ name: 'audit' })
+    const response = await api.endpoints.audit.get({
+      queryParams: { page: payload },
+    })
     commit('GET_STATISTICS', response)
   },
   setLogin: ({ commit }, payload) => {

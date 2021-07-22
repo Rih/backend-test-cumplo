@@ -6,14 +6,15 @@
       </div>
 
       <div slot="tab2" class="research__tab2">
-        <div v-for="(photo, i) in obs.photos" :key="i" style="height: 260px">
-          <img class="home__obs-img" :src="photo.medium_url" style="height: 160px" />
-          <enlargeable-image :src="photo.thumb_url" :src_large="photo.large_url">
-            <span>Ver</span>
-          </enlargeable-image>
-        </div>
-        <div style="text-align: right">
-          <MainBtn @click="(e) => assignAvatar(obs)" secondary>Asignar como avatar</MainBtn>
+        <div class="home__obs-container" v-if="hasImages">
+          <div
+            class
+            v-for="(photo, i) in obs.photos"
+            :key="i"
+            style="max-height: 300px"
+          >
+            <img class="home__obs-img" :src="photo.medium_url" @click="onSelectedImage(photo)" />
+          </div>
         </div>
       </div>
     </Tabs>
@@ -24,41 +25,60 @@
 import MapSearch from '@/components/MapSearch.vue'
 import Tabs from '@/components/Tabs.vue'
 import { mapState } from 'vuex'
-import MainBtn from '@/components/UI/MainBtn.vue'
+import dialog from '@/js/dialog'
 import { mapActions } from 'vuex'
 
 export default {
   data: () => ({}),
   computed: {
+    hasImages() {
+      return this.obs?.photos?.length > 0
+    },
     imgDefault() {
       return require('@/assets/logo.png')
     },
     ...mapState(['tabs', 'obs']),
   },
   methods: {
+    async onSelectedImage(photo) {
+      const { ok } = await dialog.open('setAlert', {
+        msg: 'Desea agregar como avatar?',
+        title: 'Agregar Avatar',
+        isActive: true,
+      })
+      if (ok) {
+        this.assignAvatar(photo)
+      }
+    },
     onTabChange(index) {
       console.log(index)
     },
-    ...mapActions(['assignAvatar']),
+    ...mapActions(['assignAvatar', 'setAlert']),
   },
   components: {
     MapSearch,
     Tabs,
-    MainBtn,
   },
 }
 </script>
 
 
 <style lang="sass" scoped>
+.home__obs-container
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  justify-content: center
 .home__obs-img
-  display: block
-  padding: 3px 10px
-  border-radius: 5px
+  padding: 10px 10px
+  border-radius: 10px
+  margin: 10px
   background: whitesmoke
-  display: inline-block
   text-align: center
   font-size: 14px
+  height: 300px
+.home__obs-img:hover
+  background: lightgray
 .home__download
   margin-top: 20px
   display: flex

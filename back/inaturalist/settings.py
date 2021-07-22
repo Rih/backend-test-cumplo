@@ -10,52 +10,134 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-from .local_settings import *
 import os
 from datetime import timedelta
+from .envtools import getenv
+from corsheaders.defaults import default_headers
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = getenv('DJANGO_SECRET')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = getenv('DEBUG') == 'True'
+
+MIDDLEWARE = []
+
+ENVIRONMENT = getenv('ENVIRONMENT')
+
+FRONT_URL = getenv('FRONT_URL')
+
+# setup with dependency: cryptography.fernet import Fernet
+# key = Fernet.generate_key()
+ENCRYPT_KEY = b'8-odN4uEDC6fwvj42IfNRDnjtQFR05JurXHFfTMIcyI='
+# Database
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('POSTGRES_USER'),
+        'USER': getenv('POSTGRES_USER'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD'),
+        'HOST': 'db',
+        'PORT': '5432',
+    }
+}
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db_inaturalist.sqlite3'),
+    }
+}
+'''
+
+# admins
+ADMINS = [('Rodrigo', 'rodrigo.ediaz.f@gmail.com')]
+
+# v3 drigox
+DRF_RECAPTCHA_SECRET_KEY = getenv('DRF_RECAPTCHA_SECRET_V3')
+
+DRF_RECAPTCHA_VERIFY_ENDPOINT = 'https://www.google.com/recaptcha/api/siteverify'
+
+INSTALLED_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.admin',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+
+
+# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ORIGIN_ALL = False
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    FRONT_URL,
+)
+CSRF_TRUSTED_ORIGINS = (
+    FRONT_URL,
+)
+
+# create an app https://www.inaturalist.org/oauth/applications/new
+# client_id = app_id
+INAT_CLIENT_ID = getenv('INAT_CLIENT_ID')
+INAT_REDIRECT_URL = f'{FRONT_URL}/redirect'
+INAT_SECRET = getenv('INAT_SECRET')
+INAT_BASE_URL = 'https://www.inaturalist.org'
+INAT_PER_PAGE = 5
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '#!z&f4cc)ym%@jg=fzf4im%eg$99i==uzrtdj$bg%dpb9pn&a1'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ['*']
 
-# defaults
-# DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440
-# DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
-# FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440
-# MIGRATION_MODULES = {}
-
 # sh bin/enter-redis-server.sh
 # redis-cli -n 1
 # 127.0.0.1:6379[1]> KEYS *
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://redis:6379/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
-#         },
-#         "KEY_PREFIX": "ifn"
-#     }
-# }
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        },
+        'KEY_PREFIX': 'inaturalist'
+    }
+}
 
 # Cache time to live is 4 hours.
-# CACHE_TTL = 60 * 60 * 4
+CACHE_TTL = 60 * 60 * 4
 
 # Application definition
 
-# its defined in local_settings
-
 # custom apps
+if ENVIRONMENT == 'DEVELOPMENT':
+    # 3rd party apps just dev
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
+
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ] + MIDDLEWARE
+
+    INTERNAL_IPS = [
+        # ...
+        '127.0.0.1',
+        # ...
+    ]
 
 INSTALLED_APPS += [
     'api',
@@ -64,7 +146,6 @@ INSTALLED_APPS += [
 
 
 # 3rd party apps
-
 INSTALLED_APPS += [
     'rest_framework',
     'drf_multiple_model',
@@ -247,8 +328,10 @@ LOGGING = {
     },
 }
 
-# GOOGLE_APP_CREDS_DIR ='/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test'
 GOOGLE_APP_CREDS_DIR = os.path.join(BASE_DIR, 'setup')
-APP_CREDS_NAME = 'exam-rodrigo-diaz-6ce020aad91d.json'
+
+APP_CREDS_NAME = getenv('GCP_BQ_CREDS_JSON')
+
 BQ_PER_PAGE = 10
+
 # export GOOGLE_APPLICATION_CREDENTIALS=/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test/

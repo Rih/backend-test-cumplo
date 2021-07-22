@@ -22,8 +22,8 @@ export default {
     console.log(state, payload)
   },
   GET_LATEST_OBSERVATIONS: (state, payload) => {
-    if(!payload.audit){
-      console.log("NOT AUDIT ERROR")
+    if (!payload.audit) {
+      console.log('NOT AUDIT ERROR')
     }
     state.observations = [...state.observations, ...payload.result.results]
   },
@@ -31,13 +31,11 @@ export default {
     state.obs = payload
   },
   SET_AVATAR: (state, payload) => {
-    if (payload.success)
-      state.user.picture = payload.avatar
-    else
-      console.log("show error")
+    if (payload.success) state.user.picture = payload.avatar
+    else console.log('show error')
   },
   CHANGE_TAB: (state, payload) => {
-    for(const k of Object.keys(state.tabs))
+    for (const k of Object.keys(state.tabs))
       state.tabs[k].isActive = k == payload
   },
   GET_STATISTICS: (state, payload) => {

@@ -27,9 +27,11 @@ const addPathParams = (resourceURL, params, slash) => {
 const addQueryParams = (resourceURL, params = {}) => {
   const keys = Object.keys(params)
   if (keys.length === 0) return resourceURL
-  let queries = ''
-  keys.forEach((key) => (queries += `${camelToSnakeCase(key)}=${params[key]}`))
-  return `${resourceURL}?${queries}`
+  const queries = Object.keys(params).map(
+    (key) => `${camelToSnakeCase(key)}=${params[key]}`
+  )
+  const query = queries.join('&')
+  return `${resourceURL}?${query}`
 }
 
 const presentToast = ({ error, toast, msg }) => {
@@ -67,7 +69,7 @@ const errorHandler = (error, resolve, toast) => {
 }
 
 class API {
-  constructor ({ url, slash, toast } = init) {
+  constructor({ url, slash, toast } = init) {
     this.slash = slash === undefined ? true : slash
     this.toast = toast === undefined ? true : toast
     this.url = url ? url : `${APP_BASE_URL}/api/v1`
@@ -77,7 +79,7 @@ class API {
    * Create and store a single entity's endpoints
    * @param {A entity Object} entity
    */
-  createEntity (entity) {
+  createEntity(entity) {
     //  * If there is a - in the entity.name, then change it
     //  * to camelCase. E.g
     //  * ```
@@ -88,14 +90,14 @@ class API {
     this.endpoints[name] = this.createBasicCRUDEndpoints(entity)
   }
 
-  createEntities (arrayOfEntity) {
+  createEntities(arrayOfEntity) {
     arrayOfEntity.forEach(this.createEntity.bind(this))
   }
   /**
    * Create the basic endpoints handlers for CRUD operations
    * @param {A entity Object} entity
    */
-  createBasicCRUDEndpoints ({ name }) {
+  createBasicCRUDEndpoints({ name }) {
     const endpoints = {}
 
     let resourceURL = `${this.url}/${name}`

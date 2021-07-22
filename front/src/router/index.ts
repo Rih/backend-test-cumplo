@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Redirect from '../views/Redirect.vue'
+import ApiRefresh from '../views/ApiRefresh.vue'
 import { guard } from '@/guards'
 
 Vue.use(VueRouter)
@@ -24,6 +25,12 @@ const routes: Array<RouteConfig> = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
+    //beforeEnter: (to, from, next) => guard(to, from, next)
+  },
+  {
+    path: '/refresh',
+    name: 'refresh',
+    component: ApiRefresh,
     //beforeEnter: (to, from, next) => guard(to, from, next)
   },
   {
