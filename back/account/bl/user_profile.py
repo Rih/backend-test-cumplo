@@ -26,15 +26,11 @@ def existing_user(**kwargs):
         return None
 
 
-def get_data(mode, data):
-    new_data = data.copy()
-    if mode in ['password']:
-        new_data['password'] = make_password(new_data['password'])
-    if mode == 'creation':
-        new_data['first_name'] = new_data['firstname']
-        new_data['last_name'] = new_data['lastname']
-        new_data['password'] = make_password(new_data['password'])
-        new_data['email'] = new_data['username']
-        del new_data['lastname']
-        del new_data['firstname']
-    return new_data
+def transform_data(data):
+    return {
+        'first_name': data['firstname'],
+        'last_name': data['lastname'],
+        'password': make_password(data['password']),
+        'email': data['username'],
+        'username': data['username'],
+    }

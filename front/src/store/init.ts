@@ -12,6 +12,6 @@ export const SIGNUP = {
   msg: ''
 }
 
-export const DEFAULT_GPS = [-33.3966833772, -70.6060117856]
+export const DEFAULT_GPS = [-33.4115041,-70.5662681]
 
-export const DEFAULT_ZOOM = 8
+export const DEFAULT_ZOOM = 18

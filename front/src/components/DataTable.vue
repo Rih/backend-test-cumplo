@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     formatGeoPosition({lat, lng}){
-      return `(${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+      return `(${parseFloat(lat).toFixed(4)}, ${parseFloat(lng).toFixed(4)})`;
     },
     onPrev() {
       this.$emit('clickedPrev', this.currentPage - 1)

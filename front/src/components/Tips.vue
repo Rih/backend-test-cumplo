@@ -2,25 +2,19 @@
   <div>
     <div v-if="!showTip" class="tips__tip">
       <div class="tips__tip_header">
-        <div style="font-weight: 600">Tip #1</div>
+        <div style="font-weight: 600">{{ title }}</div>
         <MainBtn @click="showTip = true" small outline class="tips__tip_btn">Ver</MainBtn>
       </div>
     </div>
     <div v-if="showTip" class="tips__tip-active">
       <div class="tips__tip-active_header">
-        <div style="font-weight: 600">Tip #1</div>
+        <div style="font-weight: 600">{{ title }}</div>
         <MainBtn @click="showTip = false" icon>
           <Icon>close</Icon>
         </MainBtn>
       </div>
-      <div class="tips__tip-activer_text">
-        - Mueve el mapa con gestos del mouse y da click en "Busca tu avatar"
-      </div>
-      <div class="tips__tip-activer_text">
-        - Escoje uno de los marcadores encontrados en la zona elegida
-      </div>
-      <div class="tips__tip-activer_text">
-        - Aparecerá en la siguiente pestaña la imagen encontrada que puedes asignar como tu avatar de perfil
+      <div v-for="(tip, i) in tips" :key="i" class="tips__tip-activer_text">
+        {{ tip }}
       </div>
     </div>
   </div>
@@ -32,6 +26,10 @@ import Icon from '@/components/UI/Icon.vue'
 import Vue from 'vue'
 
 export default Vue.extend({
+  props: {
+    title: String,
+    tips: Array,
+  },
   data: () => ({
     showTip: false,
   }),

@@ -2,7 +2,7 @@
   <div>
     <Card>
       <div style="display: flex; align-items: center; flex-direction: column; padding: 10px">
-        <Tips />
+        <Tips  :tips="tips" :title="titleTip" />
         <MainBtn @click="onSearchObservations" large style="height: 43px">
           BUSCA TU AVATAR
           <Icon v-if="false">close</Icon>
@@ -14,7 +14,7 @@
             ref="myMap"
             :zoom.sync="zoom"
             :center.sync="center"
-            :options="{zoomControl: false}"
+            :options="{zoomControl: true}"
           >
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
             <l-marker ref="markerYou" :lat-lng="center">
@@ -42,6 +42,8 @@ import Card from '@/components/UI/Card.vue'
 import Tips from '@/components/Tips.vue'
 import MainBtn from '@/components/UI/MainBtn.vue'
 import Icon from '@/components/UI/Icon.vue'
+import dialog from '@/js/dialog'
+import { ERROR } from '@/js/constants'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -49,18 +51,26 @@ export default {
   //   value: Object,
   // },
   data: () => ({
-    img:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Sydney_Opera_House_-_Dec_2008.jpg/1024px-Sydney_Opera_House_-_Dec_2008.jpg',
+    titleTip: "Tip #1",
+    tips: [
+      '- Mueve el mapa con gestos del mouse y da click en "Busca tu avatar"',
+      '- Escoje uno de los marcadores encontrados en la zona elegida',
+      '- Aparecerá en la siguiente pestaña la imagen encontrada que puedes asignar como tu avatar de perfil'
+    ]
   }),
   methods: {
     async checkPermission() {
       const result = await navigator.permissions.query({ name: 'geolocation' })
-
       if (result.state === 'prompt')
         setTimeout(() => console.log('prompting...'), 150)
 
       if (result.state === 'granted')
         navigator.geolocation.getCurrentPosition(this.positionGranted)
+      if (result.state === 'denied')
+        this.setToast({
+          msg: 'Sin acceso a tu ubicación, iniciando en un lugar por defecto',
+          type: ERROR,
+        })
     },
     requestPermission() {
       navigator.geolocation.getCurrentPosition(
@@ -91,13 +101,11 @@ export default {
       'getLatestObservations',
       'viewObservation',
       'changeTab',
+      'setToast',
     ]),
   },
   mounted() {
     this.checkPermission()
-    this.$nextTick(() => {
-      //console.log(this.$refs.myMap.mapObject)
-    })
   },
   computed: {
     zoom: {

@@ -17,8 +17,8 @@
           :pages="pages"
           :value="statistics.current"
           @input="onPaginate"
-          :start="(statistics.current -1 )*statistics.perPage + 1"
-          :end="(statistics.current)*statistics.perPage"
+          :start="start"
+          :end="end"
           :hasPrev="statistics.hasPrev"
           :hasNext="statistics.hasNext"
           :total="statistics.total"
@@ -54,11 +54,16 @@ export default {
     this.getStatistics(1)
   },
   computed: {
+    start() {
+      return (this.statistics.current - 1) * this.statistics.perPage + 1 || 0
+    },
+    end() {
+      return this.statistics.current * this.statistics.perPage || 0
+    },
     pages() {
       let pages = this.statistics.total / this.statistics.perPage
       if (pages < 1) pages = 1
-      if (!this.isInt(pages)) pages += 1
-      return Math.round(pages)
+      return Math.ceil(pages)
     },
     ...mapState(['checkedTables', 'statistics']),
   },

@@ -39,7 +39,7 @@ class UserCreationView(APIView):
     # tested at tests.test_api_account_post_creation
     def post(self, request, *args, **kwargs):
         response = recaptcha.validate_captcha(request.data.get('recaptchaToken'))
-        data = user_profile.get_data('creation', request.data)
+        data = user_profile.transform_data(request.data)
         serializer = UserCreationModelSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

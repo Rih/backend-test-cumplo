@@ -54,7 +54,6 @@ class ObservationsView(APIView):
         return Response({'results': results, 'audit': audit})
 
 
-
 class ProfilePicView(APIView):
     permission_classes = [IsAuthenticated]
 
