@@ -71,16 +71,24 @@ INSTALLED_APPS = [
 
 
 # CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ORIGIN_ALL = False
+CORS_ALLOW_ORIGIN_ALL = True
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
 ]
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 CORS_ORIGIN_WHITELIST = (
     FRONT_URL,
+    'http://www.evengram.xyz',
+    'https://www.evengram.xyz',
+    'http://evengram.xyz',
+    'https://evengram.xyz',
 )
 CSRF_TRUSTED_ORIGINS = (
     FRONT_URL,
+    'http://www.evengram.xyz',
+    'https://www.evengram.xyz',
+    'http://evengram.xyz',
+    'https://evengram.xyz',
 )
 
 # create an app https://www.inaturalist.org/oauth/applications/new
@@ -173,8 +181,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'account', 'templates', 'emails'),
-            os.path.join(BASE_DIR, 'xstock', 'templates', 'emails'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
