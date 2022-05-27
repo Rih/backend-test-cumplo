@@ -1,16 +1,17 @@
 version: '3'
 services:
   front:
-    container_name: app_front_inaturalist
+    container_name: app_front_cumplo
     build:
       context: .
       dockerfile: Dockerfile.front
-    image: inaturalist_front/ubuntu:v1f
+    image: cumplo_front/ubuntu:v1f
     networks:
       - frontend
     ports:
-      - "8002:82" #  proxy -> front
-      - "8001:81" # front = index.html
+      - "5050:8080" #  proxy -> front
+      - "8080:80" #  proxy -> front
+      - "8088:81" # front = index.html
     volumes:
       - ./bin:/usr/local/scripts
       - ./front:/front
@@ -22,36 +23,37 @@ services:
     tty: true
 
   web: # uwsgi
-    container_name: app_web_inaturalist
+    container_name: app_web_cumplo
     build: 
       context: .
       dockerfile: Dockerfile.back
-    image: inaturalist/ubuntu:v1b
+    image: cumplo/ubuntu:v1b
     networks:
       - frontend
       - backend
     ports:
       - "0.0.0.0:${WEB_HTTPS_PORT}:443"
       - "0.0.0.0:${WEB_HTTP_DEV_PORT}:8000"
-      - "8009:84" #  nginx proxy -> backend
-      - "8005:8081" # backend = django
+      - "4009:83" #  nginx proxy -> uwsgi
+      - "4010:84" #  nginx proxy -> gunicorn
+      - "4011:8081" # uwsgi
+      - "4012:8082" #  gunicorn
     volumes:
       - ./back:/app
       - ./bin:/usr/local/scripts
       - ./nginx:/nginx
       - ./static:/static
       - ./media:/app_media
+    env_file: .env
     environment:
       DEBUG: ${DEBUG}
       ENVIRONMENT: ${ENVIRONMENT}
       DJANGO_SECRET: ${DJANGO_SECRET}
       FRONT_URL: ${FRONT_URL}
       DRF_RECAPTCHA_SECRET_V3: ${DRF_RECAPTCHA_SECRET_V3}
-      INAT_CLIENT_ID: ${INAT_CLIENT_ID}
-      INAT_SECRET: ${INAT_SECRET}
-      GCP_BQ_CREDS_JSON: ${GCP_BQ_CREDS_JSON} # Bigquery app_creds
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PORT: ${POSTGRES_PORT}
     # restart: always
     depends_on:
       - db
@@ -59,12 +61,13 @@ services:
     tty: true
   db:
     image: postgres
-    container_name: postgres_inaturalist
+    container_name: postgres_cumplo
     networks:
       - backend
     volumes:
       #- ./database:/var/lib/postgresql/data
       - ./bin:/usr/local/scripts
+    env_file: .env
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -74,7 +77,7 @@ services:
     command:
       -c fsync=off
   redis:
-    container_name: redis_inaturalist
+    container_name: redis_cumplo
     image: redis:latest
     # restart: always
     networks:

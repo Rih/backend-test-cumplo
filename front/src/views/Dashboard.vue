@@ -6,7 +6,7 @@
     >
     <div class="dashboard__logo-box">
         <img
-          :src="logo"
+          src="@/assets/cumplo.png"
           class="dashboard__logo-img"
         />
       </div>

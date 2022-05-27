@@ -3,7 +3,7 @@
     <div class="login__holder">
       <div class="login__title-box">
         <img src="@/assets/logo.png" style="width: 60px" />
-        <div class="login__title">INaturalist</div>
+        <div class="login__title">Cumplo</div>
       </div>
 
       <div v-if="login.alert && login.btn" class="login__alert-1">

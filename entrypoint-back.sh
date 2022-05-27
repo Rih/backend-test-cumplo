@@ -6,4 +6,4 @@ service nginx start
 
 uwsgi --ini /uwsgi.ini
 
-tail -f /var/log/inaturalist_uwsgi.log
+tail -f /var/log/cumplo_uwsgi.log

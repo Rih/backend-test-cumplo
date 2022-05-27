@@ -15,15 +15,23 @@ RUN apt-get clean
 WORKDIR /app
 COPY ./back/requirements.txt /app/tmp/
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3.7 get-pip.py
-RUN python3.7 -m pip install uwsgi
+RUN python3.7 -m pip install uwsgi gunicorn
 RUN python3.7 -m pip install -r /app/tmp/requirements.txt
 COPY ./setup/ /app/setup/
-COPY ./back/inaturalist/uwsgi.conf /etc/init.d/uwsgi.conf
-COPY ./back/inaturalist/uwsgi.ini /uwsgi.ini
+COPY ./back/cumplo/uwsgi.conf /etc/init.d/uwsgi.conf
+COPY ./back/cumplo/uwsgi.ini /uwsgi.ini
 COPY ./entrypoint-back.sh /usr/local/entrypoint-back.sh
 RUN chmod +x /etc/init.d/uwsgi.conf
 RUN chmod +x /usr/local/entrypoint-back.sh
-RUN touch /var/log/inaturalist_uwsgi.log && chown www-data:www-data /var/log/inaturalist_uwsgi.log
+RUN touch /var/log/cumplo_uwsgi.log && chown www-data:www-data /var/log/cumplo_uwsgi.log
+
+RUN mkdir -p /var/log/gunicorn/
+RUN mkdir -p /var/run/gunicorn/
+RUN chown -R www-data:root /var/log/gunicorn/
+RUN chown -R www-data:root /var/run/gunicorn/
+COPY ./setup/docker/gunicorn.py /etc/init.d/gunicorn.py
+RUN chmod +x /etc/init.d/gunicorn.py
+
 
 # Set the locale
 RUN locale-gen es_CL.UTF-8

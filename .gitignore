@@ -118,3 +118,6 @@ backend/media/**/*.png
 package-lock.json
 setup/*.json
 back/setup/*.json
+front/.env.development
+front/.env.production
+setup/recaptcha/*.txt

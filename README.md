@@ -1,12 +1,12 @@
-# backend-cloud-test
+# backend-test-cumplo
 
- A nice map for inaturalist observations
+ A dashboard of prices UDIS and TIIE
 
 # Stack & Technologies
 ### Backend
 * Docker & docker-compose
 * Python 3.7
-* Django 2.2
+* Django 3.2
 * PostgreSQL
 * Redis
 * Recaptcha v3
@@ -14,8 +14,6 @@
 
 ## Libraries & 3rd parties
 * Django restframework & simplejwt
-* Google Bigquery
-* Google Bigquery
 * Swagger
 * Flake8
 
@@ -69,7 +67,7 @@
     |__ setup (files to use in production)
         |__ nginx (nginx setup)
         |__ *.json (google credential)
-    |__ inaturalist
+    |__ cumplo
         |__ ...config py files
         |__ uwsgi.init  (server config for production)
     |__ docker-compose.yml (config for development environment)
@@ -98,13 +96,11 @@
 
 ## Setup Server development
 * In root directory, define env.example properly
-    - GCP_BQ_CREDS_JSON it means the .json name for GCP connection
-    - wait for receive a working setup
 * rename .env.example into .env
-* rename inaturalist/uwsgi.py.example into inaturalist/uwsgi.py
+* rename cumplo/uwsgi.py.example into cumplo/uwsgi.py
 * Build docker: `sh bin/build-server.sh`
 * In front folder, define env.development.local properly
-    - the important are: VUE_APP_RECAPTCHA_V3 and VUE_APP_BASE_URL
+    - the important variables are: VUE_APP_RECAPTCHA_V3 and VUE_APP_BASE_URL
     - wait for receive a working setup
 * Run migrations: `python3.7 manage.py migrate`
 
@@ -115,3 +111,21 @@
 * Stop container service: `sh bin/stop-dev-server.sh`
 * Run development server: `sh bin/run-back-server.sh`
 * Run vue development server: `sh bin/run-front-server.sh`
+
+* In /etc/nginx/sites-enabled
+
+- sh bin/enter-front-server.sh
+- cd /etc/nginx/sites-enabled
+- ln -s /nginx/back back
+- ln -s /nginx/back_gunicorn back_gunicorn
+- rm -rf default
+- service nginx restart
+- check localhost:4009
+
+- sh bin/enter-front-server.sh
+- cd /etc/nginx/sites-enabled
+- ln -s /nginx/app app
+- rm -rf default
+- service nginx restart
+- yarn build
+- check localhost:8080

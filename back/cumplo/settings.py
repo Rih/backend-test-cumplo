@@ -20,6 +20,7 @@ SECRET_KEY = getenv('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv('DEBUG') == 'True'
+DEBUG = True
 
 MIDDLEWARE = []
 
@@ -47,7 +48,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db_inaturalist.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db_cumplo.sqlite3'),
     }
 }
 '''
@@ -78,27 +79,25 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 CORS_ALLOW_CREDENTIALS = False
 CORS_ORIGIN_WHITELIST = (
     FRONT_URL,
-    'http://www.evengram.xyz',
-    'https://www.evengram.xyz',
-    'http://evengram.xyz',
-    'https://evengram.xyz',
+    'http://localhost',
+    'https://localhost',
+    'http://localhost:5050',
+    'https://localhost:5050',
+    'http://localhost:8080',
+    'https://localhost:8080',
 )
 CSRF_TRUSTED_ORIGINS = (
     FRONT_URL,
-    'http://www.evengram.xyz',
-    'https://www.evengram.xyz',
-    'http://evengram.xyz',
-    'https://evengram.xyz',
+    'http://localhost',
+    'https://localhost',
+    'http://localhost:5050',
+    'https://localhost:5050',
+    'http://localhost:8080',
+    'https://localhost:8080',
 )
 
 # create an app https://www.inaturalist.org/oauth/applications/new
 # client_id = app_id
-INAT_CLIENT_ID = getenv('INAT_CLIENT_ID')
-INAT_REDIRECT_URL = f'{FRONT_URL}/redirect'
-INAT_SECRET = getenv('INAT_SECRET')
-INAT_BASE_URL = 'https://www.inaturalist.org'
-INAT_PER_PAGE = 5
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -121,7 +120,7 @@ CACHES = {
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
         },
-        'KEY_PREFIX': 'inaturalist'
+        'KEY_PREFIX': 'cumplo'
     }
 }
 
@@ -159,7 +158,6 @@ INSTALLED_APPS += [
     'drf_multiple_model',
     'corsheaders',
     'rest_framework_recaptcha',
-    'rest_framework_swagger',
 ]
 
 
@@ -174,7 +172,7 @@ MIDDLEWARE += [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'inaturalist.urls'
+ROOT_URLCONF = 'cumplo.urls'
 # CSRF_COOKIE_SECURE = False
 
 TEMPLATES = [
@@ -194,7 +192,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'inaturalist.wsgi.application'
+WSGI_APPLICATION = 'cumplo.wsgi.application'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -311,7 +309,7 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 # EMAIL_PORT = 465  # SSL
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587  # TLS
-EMAIL_HOST_USER = 'rodrigo@sistematiza.cl'
+EMAIL_HOST_USER = 'rodrigo.ediaz.f@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 
 
@@ -334,10 +332,4 @@ LOGGING = {
     },
 }
 
-GOOGLE_APP_CREDS_DIR = os.path.join(BASE_DIR, 'setup')
-
-APP_CREDS_NAME = getenv('GCP_BQ_CREDS_JSON')
-
-BQ_PER_PAGE = 10
-
-# export GOOGLE_APPLICATION_CREDENTIALS=/Users/rodrigodiaz/CosasRodrigo/projects/backend-cloud-test/
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'

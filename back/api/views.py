@@ -15,7 +15,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from account.models import UserProfile
 from api.bl.inaturalist import INaturalist
-from api.bl.bigquery import BigQuery
 # Create your views here.
 
 
@@ -27,8 +26,7 @@ class AuditObservationsView(APIView):
 
     def get(self, request, *args, **kwargs):
         page = request.GET.get('page', 1)
-        results = BigQuery(user_id=request.user.id).select(int(page))
-        return Response(results)
+        return Response({'results': 'ok'})
 
 
 class ObservationsView(APIView):

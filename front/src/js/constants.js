@@ -64,7 +64,7 @@ export const APP_BASE_URL = process.env.VUE_APP_BASE_URL
 export const RECAPTCHA_KEY = process.env.VUE_APP_RECAPTCHA_V3
 
 
-export const INATURALIST_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/INaturalist_text_logo.svg/320px-INaturalist_text_logo.svg.png'
+export const INATURALIST_LOGO = '@/assets/cumplo.png'
 
 export const DEFAULT_AVATAR =
   'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light'
